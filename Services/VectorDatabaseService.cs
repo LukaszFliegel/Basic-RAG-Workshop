@@ -13,18 +13,10 @@ public class VectorSearchResult
     public double Score { get; set; }
 }
 
-public interface IVectorDatabaseService
-{
-    Task InitializeAsync();
-    Task<bool> AddDocumentsAsync(List<DocumentChunk> documents);
-    Task<List<VectorSearchResult>> SearchAsync(string query, int limit = 5);
-    Task<int> GetDocumentCountAsync();
-}
-
-public class VectorDatabaseService : IVectorDatabaseService
+public class VectorDatabaseService
 {
     private readonly ITextEmbeddingGenerationService _embeddingService;
-    private readonly IVectorStoreRecordCollection<string, DocumentRecord> _collection;
+    private readonly InMemoryCollection<string, DocumentRecord> _collection;
     private const string CollectionName = "documents";
 
     public VectorDatabaseService(AzureOpenAIConfig config)
@@ -45,8 +37,8 @@ public class VectorDatabaseService : IVectorDatabaseService
 
     public async Task InitializeAsync()
     {
-        // Create the collection
-        await _collection.CreateCollectionIfNotExistsAsync();
+        // Ensure the collection exists
+        await _collection.EnsureCollectionExistsAsync();
         Console.WriteLine("🧠 Vector database initialized with in-memory store");
     }
 
@@ -86,9 +78,9 @@ public class VectorDatabaseService : IVectorDatabaseService
                 Id = doc.Id,
                 Content = doc.Content,
                 SourceFile = doc.SourceFile,
-                ChunkIndex = doc.ChunkIndex,
-                Description = $"Chunk {doc.ChunkIndex} from {doc.SourceFile}",
-                Vector = embedding
+                //ChunkIndex = doc.ChunkIndex,
+                //Description = $"Chunk {doc.ChunkIndex} from {doc.SourceFile}",
+                DescriptionEmbedding = embedding
             };
 
             await _collection.UpsertAsync(record);
@@ -110,16 +102,15 @@ public class VectorDatabaseService : IVectorDatabaseService
         var queryEmbedding = await _embeddingService.GenerateEmbeddingAsync(query);
 
         // Perform vector search
-        var searchOptions = new VectorSearchOptions
-        {
-            Top = limit,
-            VectorPropertyName = "Vector",
+        var searchOptions = new VectorSearchOptions<DocumentRecord> // Specify the generic type argument
+        {            
+            VectorProperty = record => record.DescriptionEmbedding, // Correctly specify the vector property
         };
 
-        var searchResults = await _collection.VectorizedSearchAsync(queryEmbedding, searchOptions);
+        var searchResults = _collection.SearchAsync(queryEmbedding, top: limit, searchOptions);
         
         var results = new List<VectorSearchResult>();
-        await foreach (var result in searchResults.Results)
+        await foreach (var result in searchResults)
         {
             results.Add(new VectorSearchResult
             {

@@ -86,11 +86,11 @@ User: /search Azure OpenAI
 
 ## Project Structure
 
-- `Program.cs` - Main entry point and dependency injection setup
-- `Application.cs` - Main application logic and user interaction
+- `Program.cs` - Main entry point with all application logic, dependency injection setup, and user interaction
 - `Models/AzureOpenAIConfig.cs` - Configuration model for Azure OpenAI settings
+- `Models/DocumentRecord.cs` - Vector store record model for document chunks
 - `Services/`
-  - `IAIService.cs` & `AIService.cs` - Chat completion service
+  - `IAIService.cs` & `AIService.cs` - Chat completion service with history
   - `IDocumentService.cs` & `DocumentService.cs` - PDF processing service
   - `IVectorDatabaseService.cs` & `VectorDatabaseService.cs` - Vector database operations
   - `IRAGService.cs` & `RAGService.cs` - RAG orchestration service

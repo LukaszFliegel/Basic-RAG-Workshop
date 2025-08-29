@@ -1,24 +1,12 @@
+using Basic_RAG_Workshop.Models;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 namespace Basic_RAG_Workshop.Services;
 
-public interface IDocumentService
-{
-    Task<List<DocumentChunk>> ProcessDocumentsAsync(string documentsPath);
-}
 
-public class DocumentChunk
-{
-    public string Id { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public string SourceFile { get; set; } = string.Empty;
-    public int ChunkIndex { get; set; }
-    public Dictionary<string, object> Metadata { get; set; } = new();
-}
-
-public class DocumentService : IDocumentService
+public class DocumentService
 {
     private const int ChunkSize = 1000; // Characters per chunk
     private const int ChunkOverlap = 200; // Overlap between chunks
@@ -87,14 +75,14 @@ public class DocumentService : IDocumentService
                     Id = $"{fileName}_chunk_{i}",
                     Content = textChunks[i],
                     SourceFile = fileName,
-                    ChunkIndex = i,
-                    Metadata = new Dictionary<string, object>
-                    {
-                        ["source"] = fileName,
-                        ["chunk_index"] = i,
-                        ["total_chunks"] = textChunks.Count,
-                        ["file_path"] = pdfPath
-                    }
+                    //ChunkIndex = i,
+                    //Metadata = new Dictionary<string, object>
+                    //{
+                    //    ["source"] = fileName,
+                    //    ["chunk_index"] = i,
+                    //    ["total_chunks"] = textChunks.Count,
+                    //    ["file_path"] = pdfPath
+                    //}
                 });
             }
         }

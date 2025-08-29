@@ -1,25 +1,34 @@
 using Microsoft.Extensions.VectorData;
-using System.Text.Json.Serialization;
 
 namespace Basic_RAG_Workshop.Models;
 
 public class DocumentRecord
 {
-    [VectorStoreRecordKey]
+    [VectorStoreKey]
     public string Id { get; set; } = string.Empty;
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public string Content { get; set; } = string.Empty;
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public string SourceFile { get; set; } = string.Empty;
 
-    [VectorStoreRecordData]
-    public int ChunkIndex { get; set; }
+    //[VectorStoreData]
+    //public int ChunkIndex { get; set; }
 
-    [VectorStoreRecordData]
-    public string Description { get; set; } = string.Empty;
+    //[VectorStoreData]
+    //public string Description { get; set; } = string.Empty;
 
-    [VectorStoreRecordVector(1536, DistanceFunction.CosineSimilarity)]
-    public ReadOnlyMemory<float>? Vector { get; set; }
+    [VectorStoreVector(1536)]
+    public ReadOnlyMemory<float>? DescriptionEmbedding { get; set; }
+}
+
+
+public class DocumentChunk
+{
+    public string Id { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+    public string SourceFile { get; set; } = string.Empty;
+    //public int ChunkIndex { get; set; }
+    //public Dictionary<string, object> Metadata { get; set; } = new();
 }
