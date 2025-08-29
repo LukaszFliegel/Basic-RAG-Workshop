@@ -1,0 +1,36 @@
+# Sample Document for RAG Workshop
+
+This is a sample text file that you can use to test the RAG functionality.
+
+## About Azure OpenAI
+
+Azure OpenAI Service provides access to OpenAI's powerful language models including GPT-4, GPT-3.5-Turbo, and embedding models through Azure's enterprise-grade infrastructure.
+
+### Key Features:
+- Enterprise security and compliance
+- Regional availability
+- Integration with Azure services
+- Responsible AI content filtering
+- Fine-tuning capabilities
+
+## Semantic Kernel
+
+Semantic Kernel is an open-source SDK that lets you easily combine AI services like OpenAI, Azure OpenAI, and Hugging Face with conventional programming languages like C#, Python, and Java.
+
+### Benefits:
+- Easy integration with existing applications
+- Plugin architecture for extensibility
+- Memory and planning capabilities
+- Cross-platform support
+
+## RAG (Retrieval-Augmented Generation)
+
+RAG combines the power of large language models with external knowledge sources to provide more accurate and up-to-date responses.
+
+### How it works:
+1. Document ingestion and chunking
+2. Vector embedding generation
+3. Similarity search
+4. Context-enhanced generation
+
+For testing purposes, you can convert this text file to PDF and place it in the Documents folder.

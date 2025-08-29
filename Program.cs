@@ -20,12 +20,15 @@ var configuration = new ConfigurationBuilder()
 
 // Bind Azure OpenAI configuration
 var azureOpenAIConfig = new AzureOpenAIConfig();
-configuration.GetSection("AzureOpenAI").Bind(azureOpenAIConfig);
+configuration.GetSection(AzureOpenAIConfig.SectionName).Bind(azureOpenAIConfig);
 
 // Configure services
 var services = new ServiceCollection();
 services.AddSingleton(azureOpenAIConfig);
 services.AddSingleton<IAIService, AIService>();
+services.AddSingleton<IDocumentService, DocumentService>();
+services.AddSingleton<IVectorDatabaseService, VectorDatabaseService>();
+services.AddSingleton<IRAGService, RAGService>();
 services.AddTransient<Application>();
 
 var serviceProvider = services.BuildServiceProvider();
