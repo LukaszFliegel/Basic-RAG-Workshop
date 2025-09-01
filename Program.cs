@@ -94,6 +94,29 @@ catch (Exception ex)
     return 1;
 }
 
+async Task InitializeDocuments()
+{
+    Console.WriteLine("🚀 Initializing RAG system...");
+
+    // Initialize vector database
+    await vectorDbService.InitializeAsync();
+
+    // Process documents and add to vector database
+    var documentsPath = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
+    var documents = await documentService.ProcessDocumentsAsync(documentsPath);
+
+    if (documents.Count > 0)
+    {
+        await vectorDbService.AddDocumentsAsync(documents);
+    }
+    else
+    {
+        Console.WriteLine("⚠️  No documents found to process. Add PDF files to the Documents folder for RAG functionality.");
+    }
+
+    Console.WriteLine("✅ RAG system initialization complete!");
+}
+
 async Task HandleRegularChatAsync(string message)
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -101,20 +124,6 @@ async Task HandleRegularChatAsync(string message)
     Console.ResetColor();
 
     var responseStream = aiService.GetStreamingResponse(message);
-    await foreach (var chunk in responseStream)
-    {
-        Console.Write(chunk);
-    }
-    Console.WriteLine("\n");
-}
-
-async Task HandleRAGChatAsync(string query)
-{
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.Write("Assistant: ");
-    Console.ResetColor();
-
-    var responseStream = await ragService.GetRAGResponseAsync(query);
     await foreach (var chunk in responseStream)
     {
         Console.Write(chunk);
@@ -137,25 +146,16 @@ async Task HandleDocumentSearchAsync(string query)
     Console.WriteLine();
 }
 
-async Task InitializeDocuments()
+async Task HandleRAGChatAsync(string query)
 {
-    Console.WriteLine("🚀 Initializing RAG system...");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.Write("Assistant: ");
+    Console.ResetColor();
 
-    // Initialize vector database
-    await vectorDbService.InitializeAsync();
-
-    // Process documents and add to vector database
-    var documentsPath = Path.Combine(Directory.GetCurrentDirectory(), "Documents");
-    var documents = await documentService.ProcessDocumentsAsync(documentsPath);
-
-    if (documents.Count > 0)
+    var responseStream = await ragService.GetRAGResponseAsync(query);
+    await foreach (var chunk in responseStream)
     {
-        await vectorDbService.AddDocumentsAsync(documents);
+        Console.Write(chunk);
     }
-    else
-    {
-        Console.WriteLine("⚠️  No documents found to process. Add PDF files to the Documents folder for RAG functionality.");
-    }
-
-    Console.WriteLine("✅ RAG system initialization complete!");
+    Console.WriteLine("\n");
 }

@@ -75,14 +75,6 @@ public class DocumentService
                     Id = $"{fileName}_chunk_{i}",
                     Content = textChunks[i],
                     SourceFile = fileName,
-                    //ChunkIndex = i,
-                    //Metadata = new Dictionary<string, object>
-                    //{
-                    //    ["source"] = fileName,
-                    //    ["chunk_index"] = i,
-                    //    ["total_chunks"] = textChunks.Count,
-                    //    ["file_path"] = pdfPath
-                    //}
                 });
             }
         }

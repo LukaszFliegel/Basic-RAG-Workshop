@@ -28,7 +28,7 @@ public class RAGService
         if (searchResults.Count > 0)
         {
             // Build context from search results
-            var context = string.Join("\n\n", searchResults.Select(r => 
+            var context = string.Join("\n\n", searchResults.Select(r =>
                 $"[Source: {r.Record.SourceFile}]\n{r.Record.Content}"));
             
             contextPrompt = $"""
@@ -46,13 +46,16 @@ public class RAGService
         else
         {
             contextPrompt = $"""
-                I couldn't find relevant information in the knowledge base for your question: "{query}"
+                No relevant information was found in the knowledge base for the user's question: "{query}"
                 
-                Let me provide a general response based on my training:
+                Please provide a helpful general response based on your training data. 
+                Let the user know that you don't have specific information about their question in the knowledge base, 
+                but offer to help with general information on the topic if possible.
+                
+                User Question: {query}
                 """;
         }
 
-        // Get response from AI service with context
         return _aiService.GetStreamingResponse(contextPrompt);
     }
 }

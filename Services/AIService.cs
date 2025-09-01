@@ -28,13 +28,10 @@ public class AIService
 
     public async IAsyncEnumerable<string> GetStreamingResponse(string prompt)
     {
-        // Add user message to chat history
         _chatHistory.AddUserMessage(prompt);
 
-        // Get streaming response from the chat completion service
         var response = _chatCompletionService.GetStreamingChatMessageContentsAsync(_chatHistory);
 
-        // Stream the response while collecting it for chat history
         var fullResponse = new System.Text.StringBuilder();
 
         await foreach (var content in response)
@@ -46,7 +43,6 @@ public class AIService
             }
         }
 
-        // Add the complete assistant response to chat history
         _chatHistory.AddAssistantMessage(fullResponse.ToString());
     }
 }
