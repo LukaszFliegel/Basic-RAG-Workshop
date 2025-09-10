@@ -43,49 +43,21 @@ A simple RAG (Retrieval-Augmented Generation) application using Semantic Kernel 
 dotnet run
 ```
 
-## Usage
+## Goal
 
-1. Start the application
-2. Enter your prompts when asked
-3. The AI response will be streamed back to the console
-4. Type 'exit' to quit the application
+Goal of this workshop is to show basic RAG concept.
+Workshop is diveded into two parts:
+- implementing simple chatbot using LLM (without any augumented generation)
+- then add RAG capabilities using Semantic Kernel and in memory vector store
 
-## Project Structure
+If you are lost, you can check branches for each step of the workshop:
+- main - initial skeleton of the console app with configuration
+- milestone/1-basic-chat - basic chatbot using LLM, the first part of the workshop
+- milestone/2-vector-db - adding vector store and RAG capabilities, the second and final part of the workshop
 
-- `Program.cs` - Main entry point and dependency injection setup
-- `Application.cs` - Main application logic and user interaction
-- `Models/AzureOpenAIConfig.cs` - Configuration model for Azure OpenAI settings
-- `Services/IAIService.cs` - Service interface for AI operations
-- `Services/AIService.cs` - Service implementation using Semantic Kernel
-- `appsettings.json` - Configuration file template
+## Assumptions
 
-## Features
-
-- Interactive console interface
-- Streaming responses from Azure OpenAI
-- Configuration management with multiple sources
-- Dependency injection setup
-- Error handling and validation
-- Unicode/Emoji support for rich text display
-
-## Troubleshooting
-
-### Unicode Characters Display as `??`
-
-If you see `??` instead of emojis or special Unicode characters, try these solutions:
-
-1. **Windows Terminal (Recommended)**: Use Windows Terminal instead of the traditional Command Prompt or PowerShell ISE for better Unicode support.
-
-2. **PowerShell Font**: Ensure your PowerShell console is using a font that supports Unicode characters:
-   - Right-click the PowerShell title bar → Properties → Font
-   - Select a font like "Consolas", "Cascadia Code", or "Segoe UI"
-
-3. **Code Page**: If still having issues, you can manually set the console code page:
-   ```powershell
-   chcp 65001
-   dotnet run
-   ```
-
-4. **Visual Studio Code**: Run the application through VS Code's integrated terminal for the best Unicode support.
-
-The application automatically sets UTF-8 encoding, but terminal/console settings may override this.
+To keep the code short and presentable during online session, some assumptions were made:
+- examples will be kept minimal and focused on core concepts to aid understanding
+- we won't create interfaces for services and use DI container, but rather simple service classes with single responsibility.
+- no error handling/logging/retries etc.
