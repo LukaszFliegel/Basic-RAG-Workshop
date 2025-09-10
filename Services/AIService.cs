@@ -4,7 +4,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace Basic_RAG_Workshop.Services;
 
-public class AIService : IAIService
+public class AIService
 {
     private readonly Kernel _kernel;
     private readonly IChatCompletionService _chatCompletionService;
@@ -26,29 +26,15 @@ public class AIService : IAIService
         _chatHistory.AddSystemMessage("You are a helpful assistant.");
     }
 
-    public Task<IAsyncEnumerable<string>> GetStreamingResponseAsync(string prompt, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<string> GetStreamingResponse(string prompt)
     {
-        // Add user message to the persistent chat history
         _chatHistory.AddUserMessage(prompt);
 
-        var response = _chatCompletionService.GetStreamingChatMessageContentsAsync(
-            _chatHistory,
-            cancellationToken: cancellationToken);
+        var response = _chatCompletionService.GetStreamingChatMessageContentsAsync(_chatHistory);
 
-        return Task.FromResult(StreamResponseAndCollect(response));
-    }
-
-    public void ClearChatHistory()
-    {
-        _chatHistory.Clear();
-    }
-
-    private async IAsyncEnumerable<string> StreamResponseAndCollect(
-        IAsyncEnumerable<StreamingChatMessageContent> streamingResponse)
-    {
         var fullResponse = new System.Text.StringBuilder();
 
-        await foreach (var content in streamingResponse)
+        await foreach (var content in response)
         {
             if (!string.IsNullOrEmpty(content.Content))
             {
@@ -57,7 +43,34 @@ public class AIService : IAIService
             }
         }
 
-        // Add the complete assistant response to chat history
         _chatHistory.AddAssistantMessage(fullResponse.ToString());
     }
+
+    //public Task<IAsyncEnumerable<string>> GetStreamingResponseAsync(string prompt)
+    //{
+    //    // Add user message to the persistent chat history
+    //    _chatHistory.AddUserMessage(prompt);
+
+    //    var response = _chatCompletionService.GetStreamingChatMessageContentsAsync(_chatHistory);
+
+    //    return Task.FromResult(StreamResponseAndCollect(response));
+    //}
+
+    //private async IAsyncEnumerable<string> StreamResponseAndCollect(
+    //    IAsyncEnumerable<StreamingChatMessageContent> streamingResponse)
+    //{
+    //    var fullResponse = new System.Text.StringBuilder();
+
+    //    await foreach (var content in streamingResponse)
+    //    {
+    //        if (!string.IsNullOrEmpty(content.Content))
+    //        {
+    //            fullResponse.Append(content.Content);
+    //            yield return content.Content;
+    //        }
+    //    }
+
+    //    // Add the complete assistant response to chat history
+    //    _chatHistory.AddAssistantMessage(fullResponse.ToString());
+    //}
 }

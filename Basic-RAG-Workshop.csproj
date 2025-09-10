@@ -6,6 +6,7 @@
     <RootNamespace>Basic_RAG_Workshop</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>28aec8bc-9d99-431a-bafb-54889c613049</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
